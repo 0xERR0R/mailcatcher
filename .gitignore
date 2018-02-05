@@ -1,5 +1,6 @@
 .gradle
 
+
 *.iml
 build/
 out/
@@ -18,7 +19,6 @@ out/
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.zip
