@@ -7,7 +7,7 @@ before_script:
 script:
 - ./gradlew build
 - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-- docker build -t meterng-armhf -f Dockerfile.armhf .
+- docker build -t mailcatcher-armhf -f Dockerfile.armhf .
 after_success:
 - docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWORD" 
 - docker tag mailcatcher-armhf:latest $DOCKER_USER/mailcatcher-armhf:latest
