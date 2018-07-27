@@ -2,6 +2,9 @@ FROM arm32v7/openjdk:8-jre
 
 EXPOSE 1025
 
+WORKDIR /appdata
+VOLUME /appdata
+
 COPY build/libs/mailcatcher*.jar /opt/mailcatcher.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Xms32m", "-Xmx32m", "-jar","/opt/mailcatcher.jar"]
 
