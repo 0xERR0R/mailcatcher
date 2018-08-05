@@ -6,5 +6,5 @@ WORKDIR /appdata
 VOLUME /appdata
 
 COPY build/libs/mailcatcher*.jar /opt/mailcatcher.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Xms32m", "-Xmx32m", "-jar","/opt/mailcatcher.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar","/opt/mailcatcher.jar"]
 
