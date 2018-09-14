@@ -1,12 +1,6 @@
 sudo: required
 services: docker
-language: java
-jdk: openjdk8
-before_script:
-- chmod +x gradlew
 script:
-- ./gradlew build
-- docker run --rm --privileged multiarch/qemu-user-static:register --reset
 - docker build -t mailcatcher-armhf -f Dockerfile.armhf .
 after_success:
 - docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWORD" 

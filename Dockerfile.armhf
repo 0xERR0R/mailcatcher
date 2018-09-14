@@ -1,10 +1,18 @@
-FROM arm32v7/openjdk:8-jre
+FROM golang AS builder
 
-EXPOSE 1025
+ARG DEP_VERSION="v0.5.0"
+ADD https://github.com/golang/dep/releases/download/${DEP_VERSION}/dep-linux-amd64 /usr/bin/dep
+RUN chmod +x /usr/bin/dep
 
-WORKDIR /appdata
-VOLUME /appdata
+# Copy the code from the host and compile it
+WORKDIR $GOPATH/src/mailcatcher
+COPY Gopkg.toml Gopkg.lock ./
+RUN dep ensure --vendor-only
 
-COPY build/libs/mailcatcher*.jar /opt/mailcatcher.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar","/opt/mailcatcher.jar"]
+COPY . ./
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -a -installsuffix nocgo -o /app cmd/mailcatcher/*.go
 
+FROM scratch
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /app ./
+ENTRYPOINT ["./app"]
