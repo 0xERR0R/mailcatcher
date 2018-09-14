@@ -15,7 +15,7 @@
 | MC_PORT | SMTP listening port. Must match mapped port of container. |
 | MC_HOST | email with this host name will be accepted (typically your dyndns host name) |
 | MC_REDIRECT_TO | destination address (all mails will be redirected to this address |
-| MC_SENDER_MAIL=yyy@googlemail.com | This address will be used for mail sending |
+| MC_SENDER_MAIL | This address will be used for mail sending |
 | MC_SMTP_HOST | use this SMTP server |
 | MC_SMTP_PORT | with SMTP Port |
 | MC_SMTP_USER | Authentication for SMTP server |
