@@ -1,0 +1,17 @@
+version: '2.1'
+services:
+  mailcatcher:
+    image: spx01/mailcatcher-armhf
+    restart: always
+    container_name: mailcatcher
+    ports:
+    - 1025:1025
+    environment:
+    - MC_PORT=1025
+    - MC_HOST=xxx.dyndns.org
+    - MC_REDIRECT_TO=xxx@gmail.com
+    - MC_SENDER_MAIL=yyy@googlemail.com
+    - MC_SMTP_HOST=smtp.gmail.com
+    - MC_SMTP_PORT=587
+    - MC_SMTP_USER=yyy@googlemail.com
+    - MC_SMTP_PASSWORD=yyy123
