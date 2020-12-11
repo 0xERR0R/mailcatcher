@@ -1,3 +1,5 @@
+![Build](https://github.com/0xERR0R/mailcatcher/workflows/Build/badge.svg)
+
 # mailcatcher
 
 #### *mailcatcher* is a small self hosted SMTP server which catches all incoming mails and sends them to a defined mail address. Can be used with dyndns to create own addresses for trash mails. Works fine on Raspberry PI 3!
