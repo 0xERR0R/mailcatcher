@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   mailcatcher:
-    image: spx01/mailcatcher-armhf
+    image: ghcr.io/0xerr0r/mailcatcher
     restart: always
     container_name: mailcatcher
     ports:

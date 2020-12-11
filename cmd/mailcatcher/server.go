@@ -1,34 +1,55 @@
 package main
 
 import (
-	"strings"
 	"io"
 	"log"
 	"net/smtp"
 	"strconv"
+	"strings"
 
-	gosmpt "github.com/emersion/go-smtp"
-	"github.com/veqryn/go-email/email"
 	"fmt"
+	gosmtp "github.com/emersion/go-smtp"
+	"github.com/veqryn/go-email/email"
 )
 
 var config *Configuration
 
 type Backend struct{}
 
-func (bkd *Backend) Login(username, password string) (gosmpt.User, error) {
-	return &User{}, nil
+func (bkd *Backend) Login(state *gosmtp.ConnectionState, username, password string) (gosmtp.Session, error) {
+	return &Session{
+		to: make([]string, 0),
+	}, nil
 }
 
-func (bkd *Backend) AnonymousLogin() (gosmpt.User, error) {
-	return &User{}, nil
+func (bkd *Backend) AnonymousLogin(state *gosmtp.ConnectionState) (gosmtp.Session, error) {
+	return nil, gosmtp.ErrAuthRequired
 }
 
-type User struct{}
+type Session struct {
+	from string
+	to   []string
+}
 
-func (u *User) Send(from string, to []string, r io.Reader) error {
+func (s *Session) Send(from string, to []string, r io.Reader) error {
 	log.Printf("New message from '%s' to '%s' received", from, to)
-	if isRecipientValid(to) {
+
+	return nil
+}
+
+func (s *Session) Mail(from string, opts gosmtp.MailOptions) error {
+	s.from = from
+	return nil
+}
+
+func (s *Session) Rcpt(to string) error {
+	s.to = append(s.to, to)
+	return nil
+}
+
+func (s *Session) Data(r io.Reader) error {
+	log.Printf("New message from '%s' to '%s' received", s.from, s.to)
+	if isRecipientValid(s.to) {
 		if msg, err := email.ParseMessage(r); err != nil {
 			log.Fatal("error", err)
 			return err
@@ -46,11 +67,12 @@ func (u *User) Send(from string, to []string, r io.Reader) error {
 	} else {
 		log.Print("ignoring message")
 	}
-
 	return nil
 }
 
-func (u *User) Logout() error {
+func (s *Session) Reset() {}
+
+func (s *Session) Logout() error {
 	return nil
 }
 
@@ -88,11 +110,10 @@ func NewServer(configuration *Configuration) error {
 	config = configuration
 	be := &Backend{}
 
-	s := gosmpt.NewServer(be)
+	s := gosmtp.NewServer(be)
 
 	s.Addr = ":" + strconv.Itoa(config.MC_PORT)
 	s.Domain = config.MC_HOST
-	s.MaxIdleSeconds = 300
 	s.MaxMessageBytes = 1024 * 1024 * 20
 	s.MaxRecipients = 50
 	s.AllowInsecureAuth = true
