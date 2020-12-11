@@ -17,5 +17,4 @@ LABEL org.opencontainers.image.source="https://github.com/0xERR0R/mailcatcher" \
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/bin/mailcatcher /app
-RUN ls -lah /app
 ENTRYPOINT ["/app"]
