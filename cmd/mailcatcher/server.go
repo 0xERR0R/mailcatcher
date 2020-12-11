@@ -16,14 +16,16 @@ var config *Configuration
 
 type Backend struct{}
 
-func (bkd *Backend) Login(state *gosmtp.ConnectionState, username, password string) (gosmtp.Session, error) {
+func (bkd *Backend) Login(_ *gosmtp.ConnectionState, _, _ string) (gosmtp.Session, error) {
 	return &Session{
 		to: make([]string, 0),
 	}, nil
 }
 
-func (bkd *Backend) AnonymousLogin(state *gosmtp.ConnectionState) (gosmtp.Session, error) {
-	return nil, gosmtp.ErrAuthRequired
+func (bkd *Backend) AnonymousLogin(_ *gosmtp.ConnectionState) (gosmtp.Session, error) {
+	return &Session{
+		to: make([]string, 0),
+	}, nil
 }
 
 type Session struct {
@@ -31,13 +33,7 @@ type Session struct {
 	to   []string
 }
 
-func (s *Session) Send(from string, to []string, r io.Reader) error {
-	log.Printf("New message from '%s' to '%s' received", from, to)
-
-	return nil
-}
-
-func (s *Session) Mail(from string, opts gosmtp.MailOptions) error {
+func (s *Session) Mail(from string, _ gosmtp.MailOptions) error {
 	s.from = from
 	return nil
 }
@@ -117,6 +113,7 @@ func NewServer(configuration *Configuration) error {
 	s.MaxMessageBytes = 1024 * 1024 * 20
 	s.MaxRecipients = 50
 	s.AllowInsecureAuth = true
+	s.AuthDisabled = true
 
 	log.Println("Starting server at", s.Addr)
 	return s.ListenAndServe()
