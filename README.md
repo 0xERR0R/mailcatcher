@@ -22,3 +22,8 @@
 | MC_SMTP_PORT | with SMTP Port |
 | MC_SMTP_USER | Authentication for SMTP server |
 | MC_SMTP_PASSWORD| Authentication for SMTP server |
+
+
+## Hints
+
+If you are using GMail SMTP, please activate the usage of insecure apps on https://support.google.com/accounts/answer/6010255?hl=en .
