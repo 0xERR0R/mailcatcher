@@ -7,3 +7,5 @@ vendor/
 *.zip
 *.tar.gz
 *.rar
+
+coverage.txt

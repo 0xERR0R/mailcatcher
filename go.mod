@@ -1,4 +1,4 @@
-module mailcatcher
+module github.com/0xERR0R/mailcatcher
 
 go 1.18
 

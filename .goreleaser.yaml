@@ -1,0 +1,86 @@
+project_name: mailcatcher
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+    # you may remove this if you don't need go generate
+    - go generate ./...
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - 6
+      - 7
+    binary: mailcatcher
+archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+dockers:
+- image_templates:
+  - "ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-amd64"
+  use: buildx
+  dockerfile: Dockerfile
+  build_flag_templates:
+  - "--platform=linux/amd64"
+- image_templates:
+  - "ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-arm64v8"
+  use: buildx
+  goarch: arm64
+  dockerfile: Dockerfile
+  build_flag_templates:
+  - "--platform=linux/arm64/v8"
+- image_templates:
+  - "ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-armv6"
+  use: buildx
+  goarch: arm
+  goarm: 6
+  dockerfile: Dockerfile
+  build_flag_templates:
+  - "--platform=linux/arm/v6"  
+- image_templates:
+  - "ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-armv7"
+  use: buildx
+  goarch: arm
+  goarm: 7
+  dockerfile: Dockerfile
+  build_flag_templates:
+  - "--platform=linux/arm/v7"    
+docker_manifests:
+- name_template: ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}
+  image_templates:
+  - ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-amd64
+  - ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-arm64v8
+  - ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-armv6
+  - ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-armv7
+- name_template: ghcr.io/0xerr0r/{{ .ProjectName }}:latest
+  image_templates:
+    - ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-amd64
+    - ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-arm64v8
+    - ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-armv6
+    - ghcr.io/0xerr0r/{{ .ProjectName }}:{{ .Version }}-armv7
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-SNAPSHOT"
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
