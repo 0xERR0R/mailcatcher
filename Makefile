@@ -20,7 +20,7 @@ build:  ## Build binary
 	go build -v -o $(BIN_OUT_DIR)/$(BINARY_NAME)
 
 test:  ## run tests
-	go test -v -coverprofile=coverage.txt -covermode=atomic -cover ./...
+	go run github.com/onsi/ginkgo/v2/ginkgo --coverprofile=coverage.txt --covermode=atomic -cover ./...
 
 lint: build ## run golangcli-lint checks
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANG_LINT_VERSION)

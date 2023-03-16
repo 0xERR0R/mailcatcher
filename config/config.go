@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/tkanos/gonfig"
+
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
 	"gopkg.in/go-playground/validator.v9"
@@ -21,7 +23,22 @@ type Configuration struct {
 	SMTPPassword string `env:"MC_SMTP_PASSWORD" validate:"required"`
 }
 
-func (c *Configuration) Validate() error {
+func GetConfiguration() (Configuration, error) {
+	configuration := Configuration{}
+	err := gonfig.GetConf("", &configuration)
+
+	if err != nil {
+		return configuration, fmt.Errorf("can't read configuration %w", err)
+	}
+
+	if err := Validate(configuration); err != nil {
+		return configuration, fmt.Errorf("Validation failed, please check the configuration %w", err)
+	}
+
+	return configuration, nil
+}
+
+func Validate(c Configuration) error {
 	en := en.New()
 	uni := ut.New(en, en)
 
