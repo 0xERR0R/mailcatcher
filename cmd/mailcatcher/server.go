@@ -47,7 +47,7 @@ func (s *Session) AuthPlain(username, password string) error {
 }
 
 
-func (s *Session) Rcpt(to string) error {
+func (s *Session) Rcpt(to string, opts *gosmtp.RcptOptions) error {
 	s.to = append(s.to, to)
 	return nil
 }
