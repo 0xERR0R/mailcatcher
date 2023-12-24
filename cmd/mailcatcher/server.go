@@ -16,16 +16,20 @@ var config *Configuration
 
 type Backend struct{}
 
-func (bkd *Backend) Login(_ *gosmtp.ConnectionState, _, _ string) (gosmtp.Session, error) {
+func (bkd *Backend) Login(_ *gosmtp.Conn, _, _ string) (gosmtp.Session, error) {
 	return &Session{
 		to: make([]string, 0),
 	}, nil
 }
 
-func (bkd *Backend) AnonymousLogin(_ *gosmtp.ConnectionState) (gosmtp.Session, error) {
+func (bkd *Backend) AnonymousLogin(_ *gosmtp.Conn) (gosmtp.Session, error) {
 	return &Session{
 		to: make([]string, 0),
 	}, nil
+}
+
+func (bkd *Backend) NewSession(c *gosmtp.Conn) (gosmtp.Session, error) {
+	return &Session{}, nil
 }
 
 type Session struct {
@@ -33,10 +37,15 @@ type Session struct {
 	to   []string
 }
 
-func (s *Session) Mail(from string, _ gosmtp.MailOptions) error {
+func (s *Session) Mail(from string, opts *gosmtp.MailOptions) error {
 	s.from = from
 	return nil
 }
+
+func (s *Session) AuthPlain(username, password string) error {
+	return nil
+}
+
 
 func (s *Session) Rcpt(to string) error {
 	s.to = append(s.to, to)
