@@ -1,6 +1,7 @@
 FROM golang:1-alpine AS builder
 
-RUN apk --no-cache add gcc
+#RUN apk --no-cache add gcc
+RUN apk --no-cache add build-base
 
 WORKDIR ${GOPATH}/src/github.com/0xERR0R/mailcatcher
 COPY go.mod go.sum ./
