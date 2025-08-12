@@ -153,10 +153,3 @@ func TestMailcatcherFullWorkflow(t *testing.T) {
 		assert.Len(t, messages, 0, "Expected 0 emails in mailpit for invalid domain")
 	})
 }
-
-// TestMailcatcherImageExists checks if the mailcatcher:test image exists
-func TestMailcatcherImageExists(t *testing.T) {
-	// This test ensures the image is available before running full tests
-	// It will be skipped if the image doesn't exist
-	t.Skip("This test is for checking image availability - run build_and_test.sh instead")
-}
