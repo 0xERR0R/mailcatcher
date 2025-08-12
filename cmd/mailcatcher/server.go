@@ -87,8 +87,13 @@ func sendMail(msg *email.Message) {
 		return
 	}
 
+	var auth smtp.Auth
+	if config.MC_SMTP_USER != "" && config.MC_SMTP_PASSWORD != "" {
+		auth = smtp.PlainAuth("", config.MC_SMTP_USER, config.MC_SMTP_PASSWORD, config.MC_SMTP_HOST)
+	}
+
 	err = smtp.SendMail(fmt.Sprintf("%s:%d", config.MC_SMTP_HOST, config.MC_SMTP_PORT),
-		smtp.PlainAuth("", config.MC_SMTP_USER, config.MC_SMTP_PASSWORD, config.MC_SMTP_HOST),
+		auth,
 		config.MC_SENDER_MAIL, []string{config.MC_REDIRECT_TO}, b)
 
 	if err != nil {

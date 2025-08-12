@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/go-playground/validator.v9"
 	"log"
+
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
+	"gopkg.in/go-playground/validator.v9"
 	en_translations "gopkg.in/go-playground/validator.v9/translations/en"
 )
 
@@ -16,8 +17,8 @@ type Configuration struct {
 	MC_SENDER_MAIL   string `validate:"required,email"`
 	MC_SMTP_HOST     string `validate:"required,hostname"`
 	MC_SMTP_PORT     int    `validate:"required,gte=0,lte=65535"`
-	MC_SMTP_USER     string `validate:"required"`
-	MC_SMTP_PASSWORD string `validate:"required"`
+	MC_SMTP_USER     string `validate:"omitempty"`
+	MC_SMTP_PASSWORD string `validate:"omitempty"`
 }
 
 func (c *Configuration) Validate() error {
