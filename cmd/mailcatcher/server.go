@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"fmt"
+
 	gosmtp "github.com/emersion/go-smtp"
 	"github.com/veqryn/go-email/email"
 )
@@ -16,13 +17,7 @@ var config *Configuration
 
 type Backend struct{}
 
-func (bkd *Backend) Login(_ *gosmtp.ConnectionState, _, _ string) (gosmtp.Session, error) {
-	return &Session{
-		to: make([]string, 0),
-	}, nil
-}
-
-func (bkd *Backend) AnonymousLogin(_ *gosmtp.ConnectionState) (gosmtp.Session, error) {
+func (bkd *Backend) NewSession(c *gosmtp.Conn) (gosmtp.Session, error) {
 	return &Session{
 		to: make([]string, 0),
 	}, nil
@@ -33,12 +28,12 @@ type Session struct {
 	to   []string
 }
 
-func (s *Session) Mail(from string, _ gosmtp.MailOptions) error {
+func (s *Session) Mail(from string, opts *gosmtp.MailOptions) error {
 	s.from = from
 	return nil
 }
 
-func (s *Session) Rcpt(to string) error {
+func (s *Session) Rcpt(to string, opts *gosmtp.RcptOptions) error {
 	s.to = append(s.to, to)
 	return nil
 }
@@ -113,7 +108,6 @@ func NewServer(configuration *Configuration) error {
 	s.MaxMessageBytes = 1024 * 1024 * 20
 	s.MaxRecipients = 50
 	s.AllowInsecureAuth = true
-	s.AuthDisabled = true
 
 	log.Println("Starting server at", s.Addr)
 	return s.ListenAndServe()
