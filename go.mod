@@ -6,7 +6,7 @@ require (
 	github.com/emersion/go-smtp v0.24.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	github.com/testcontainers/testcontainers-go v0.38.0
 	github.com/tkanos/gonfig v0.0.0-20210106201359-53e13348de2f
 	github.com/veqryn/go-email v0.0.0-20240310084539-bc822271db61
