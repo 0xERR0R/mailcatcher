@@ -3,7 +3,7 @@ module mailcatcher
 go 1.25.0
 
 require (
-	github.com/emersion/go-smtp v0.24.0
+	github.com/emersion/go-smtp v0.25.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/stretchr/testify v1.11.1
