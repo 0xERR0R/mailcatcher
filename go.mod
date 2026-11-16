@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/emersion/go-smtp v0.25.0
-	github.com/go-playground/locales v0.14.1
+	github.com/go-playground/locales v0.14.2
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/stretchr/testify v1.12.1
 	github.com/testcontainers/testcontainers-go v0.40.0
